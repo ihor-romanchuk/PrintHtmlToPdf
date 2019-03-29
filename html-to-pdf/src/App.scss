@@ -1,0 +1,70 @@
+.app {
+  display: flex;
+  justify-content: flex-start;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.main-container {
+  width: 816px;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 17px 11px 0 11px;
+
+  .logo-block {
+    padding: 5px 0 0 36px;
+
+    .address {
+      padding-top: 7px;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .logo {
+      height: 59px;
+    }
+  }
+
+  .reference-box {
+    width: 323px;
+    border: 2px solid #084F98;
+    padding: 0 20px 5px 20px;
+    font-size: 12px;
+
+    .title {
+      padding-bottom: 4px;
+      font-size: 14px;
+    }
+
+    div {
+      line-height: 17px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .amount-block {
+      display: flex;
+      justify-content: center;
+      padding-top: 17px;
+
+      .amount {
+        background-color: #084F98;
+        border-radius: 8px;
+        display: inline-block;
+        color: #fff;
+        font-size: 16px;
+        line-height: 20px;
+        padding: 5px 24px;
+
+        span + span {
+          padding-left: 20px;
+        }
+      }
+    }
+  }
+}
