@@ -41,7 +41,33 @@ class App extends Component {
         }
       },
       contactsData: {
-
+        contactInfo: {
+          name: data.contact.name,
+          address1: data.contact.address1,
+          address2: data.contact.address2,
+          city: data.contact.city,
+          state: data.contact.state,
+          postalCode: data.contact.postalcode
+        },
+        titleFontColor: data.fontcolor,
+        contactOptions: [
+          {
+            imageSrc: "messageIcon.png",
+            title: data.headers.header8english,
+            description: data.texts.value8english
+          }, {
+            title: data.headers.header9english,
+            value: data.texts.value9english1,
+            description: data.texts.value9english2
+          }, {
+            imageSrc: "moneyIcon.png",
+            title: data.headers.header13english,
+            description: data.texts.value13english
+          }, {
+            title: data.headers.header4english,
+            value: data.texts.value4english
+          }
+        ]
       },
       additionalInfoData: {
 
@@ -55,7 +81,7 @@ class App extends Component {
         ]
       },
       footerData: {
-        
+
       }
     };
   }
@@ -65,7 +91,7 @@ class App extends Component {
 
     return (
       <div className="app">
-        <div class="main-container">
+        <div className="main-container">
           <Header {...data.headerData}></Header>
           <Contacts {...data.contactsData}></Contacts>
           <AdditionalInfo {...data.additionalInfoData}></AdditionalInfo>
@@ -107,7 +133,33 @@ const Header = props => {
 
 const Contacts = props => {
   return (
-    <div>Contacts goes here</div>
+    <div className="contacts-section">
+      <div className="contact-info-wrapper">
+        <div className="info">
+          <div>{props.contactInfo.name}</div>
+          <div>{props.contactInfo.address1} {props.contactInfo.address2}</div>
+          <div>{props.contactInfo.city}, {props.contactInfo.state} {props.contactInfo.postalCode}</div>
+        </div>
+      </div>
+      <div className="options">
+        {props.contactOptions.map(option => {
+          return (
+            <div className="option">
+              <div className="icon-wrapper">
+                {option.imageSrc && <img src={option.imageSrc} />}
+              </div>
+              <div className="info-wrapper">
+                <div className="title-wrapper">
+                  <span className="title">{option.title}</span>
+                  {option.value && <span className="value">{option.value}</span>}
+                </div>
+                {option.description && <div className="description">{option.description}</div>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
@@ -139,7 +191,7 @@ const Table = props => {
       {props.data.items.map(item => {
         return (
           <TableItem {...item}></TableItem>
-          );
+        );
       })
       }
     </div>
