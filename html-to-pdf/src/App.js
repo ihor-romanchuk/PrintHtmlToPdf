@@ -70,7 +70,17 @@ class App extends Component {
         ]
       },
       additionalInfoData: {
-
+        titleFontColor: data.fontcolor,
+        items: [
+          {
+            title: data.headers.header10english,
+            text: data.texts.bodyenglish
+          },
+          {
+            title: data.headers.header11english,
+            text: data.texts.bodyotherenglish
+          }
+        ]
       },
       tableHeaderData: {
 
@@ -150,7 +160,7 @@ const Contacts = props => {
               </div>
               <div className="info-wrapper">
                 <div className="title-wrapper">
-                  <span className="title">{option.title}</span>
+                  <span className="title" style={{ color: props.titleFontColor }}>{option.title}</span>
                   {option.value && <span className="value">{option.value}</span>}
                 </div>
                 {option.description && <div className="description">{option.description}</div>}
@@ -165,7 +175,18 @@ const Contacts = props => {
 
 const AdditionalInfo = props => {
   return (
-    <div>AdditionalInfo goes here</div>
+    <div className="additional-info-section">
+      {props.items.map(item => {
+        return (
+          <div>
+            <div className="title-wrapper">
+              <span className="title" style={{ color: props.titleFontColor }}>{item.title}</span>
+            </div>
+            <div className="text">{item.text}</div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 
