@@ -91,7 +91,66 @@ class App extends Component {
         ]
       },
       footerData: {
-
+        infoTitle: data.texts.couponenglish,
+        titleFontColor: data.fontcolor,
+        paymentOptions: {
+          paymentTitle: data.headers.header12english,
+          paymentText: data.texts.payment1english,
+          options: [
+            {
+              title: data.headers.header16english,
+              value: data.texts.value16english,
+              isTitleHighlighted: true
+            },
+            {
+              title: data.headers.header17english,
+              value: data.texts.value17english,
+              isTitleHighlighted: true,
+              isValueHighlighted: true
+            },
+            {
+              title: data.headers.header14english,
+              value: data.texts.value14english
+            }
+          ],
+          specialOption: {
+            title: data.headers.header15english,
+            value: data.texts.payment2english
+          }
+        },
+        paymentSummary: {
+          referenceInfo: [
+            {
+              title: data.headers.header1english,
+              value: data.texts.value1english
+            },
+            {
+              title: data.headers.header3english,
+              value: data.texts.value3english
+            },
+            {
+              title: data.headers.header6english,
+              value: data.texts.value6english
+            },
+            {
+              title: data.headers.header5english,
+              value: data.texts.value5english1
+            },
+            {
+              title: data.headers.header7english,
+              value: data.service.total
+            }
+          ],
+          paymentRequestHtml: data.texts.payment3english,
+          client: {
+            name: data.client.returnname,
+            address1: data.client.address1,
+            address2: data.client.address2,
+            city: data.client.city,
+            state: data.client.state,
+            postalCode: data.client.postalcode
+          }
+        }
       }
     };
   }
@@ -131,7 +190,7 @@ const Header = props => {
           );
         })}
         <div className="amount-block">
-          <div className="amount">
+          <div className="amount button-blue">
             <span>{props.referenceInfo.amount.title}</span>
             <span>{props.referenceInfo.amount.value}</span>
           </div>
@@ -221,7 +280,47 @@ const Table = props => {
 
 const Footer = props => {
   return (
-    <div className="footer">Footer goes here</div>
+    <div className="footer-section">
+      <div className="footer-title">{props.infoTitle}</div>
+      <div className="footer-body">
+        <div className="payment-options-block">
+          <div className="payment-title button-blue">{props.paymentOptions.paymentTitle}</div>
+          <div className="options-wrapper">
+            <div className="payment-text" dangerouslySetInnerHTML={{ __html: props.paymentOptions.paymentText }}></div>
+            {props.paymentOptions.options.map(option => {
+              return (
+                <div className="payment-option">
+                  <span className={option.isTitleHighlighted && "title"} style={option.isTitleHighlighted ? { color: props.titleFontColor } : {}}>{option.title}</span>
+                  <span className={option.isValueHighlighted && "text-bold"}>{option.value}</span>
+                </div>
+              );
+            })}
+            <div className="special-option">
+              <div className="title" dangerouslySetInnerHTML={{ __html: props.paymentOptions.specialOption.title }}></div>
+              <div className="description" dangerouslySetInnerHTML={{ __html: props.paymentOptions.specialOption.value }}></div>
+            </div>
+          </div>
+        </div>
+        <div className="payment-summary-block">
+          <div className="summary-wrapper">
+            {props.paymentSummary.referenceInfo.map(item => {
+              return (
+                <div className="info-item">
+                  <span>{item.title}</span>
+                  <span>{item.value}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="payment-request" dangerouslySetInnerHTML={{ __html: props.paymentSummary.paymentRequestHtml }}></div>
+          <div className="client">
+            <div className="name">{props.paymentSummary.client.name}</div>
+            <div>{props.paymentSummary.client.address1} {props.paymentSummary.client.address2}</div>
+            <div>{props.paymentSummary.client.city}, {props.paymentSummary.client.state} {props.paymentSummary.client.postalCode}</div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

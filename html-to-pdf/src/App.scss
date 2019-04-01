@@ -5,6 +5,24 @@
   * {
     box-sizing: border-box;
   }
+
+  .text-bold {
+    font-weight: 700;
+  }
+
+  .button-blue {
+    display: inline-block;
+    background-color: #084F98;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 17px;
+    line-height: 20px;
+    padding: 5px 24px 7px;
+  }
+
+  @media print {
+    -webkit-print-color-adjust: exact;
+  }
 }
 
 .main-container {
@@ -36,7 +54,7 @@
     padding: 0 20px 5px 20px;
 
     .title {
-      padding-bottom: 4px;
+      padding: 2px 0;
       font-size: 14px;
     }
 
@@ -52,14 +70,6 @@
       padding-top: 17px;
 
       .amount {
-        background-color: #084F98;
-        border-radius: 8px;
-        display: inline-block;
-        color: #fff;
-        font-size: 16px;
-        line-height: 20px;
-        padding: 5px 24px;
-
         span+span {
           padding-left: 20px;
         }
@@ -69,7 +79,8 @@
 }
 
 .contacts-section {
-  $icon-width: 20px;
+  $icon-width: 30px;
+  $icon-height: 30px;
 
   font-size: 12px;
   display: flex;
@@ -77,22 +88,27 @@
   padding-top: 17px;
 
   .contact-info-wrapper {
-    padding-left: 85px;
+    padding-left: 82px;
   }
 
   .options {
-    padding-right: 120px;
+    padding-right: 80px;
+
+    .option+.option {
+      padding-top: 4px;
+    }
 
     .icon-wrapper {
       display: inline-block;
       vertical-align: top;
       width: $icon-width;
-      height: 20px;
+      height: $icon-height;
     }
 
     .info-wrapper {
       display: inline-block;
       width: calc(100% - #{$icon-width});
+      padding-left: 10px;
     }
 
     .title-wrapper {
@@ -100,8 +116,12 @@
       justify-content: space-between;
 
       .title {
-        font-size: 14px;
-        line-height: 17px;
+        font-size: 17px;
+        line-height: 19px;
+      }
+
+      .value {
+        font-weight: 700;
       }
     }
   }
@@ -110,7 +130,7 @@
 .additional-info-section {
   display: flex;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 2px;
 
   &>div {
     display: inline-block;
@@ -130,12 +150,115 @@
     padding-left: 10px;
 
     .title {
-      font-size: 18px;
+      font-size: 17px;
     }
   }
 
   .text {
     font-size: 16px;
-    padding-left: 10px;
+    line-height: 18px;
+    padding: 1px 0 0 11px;
+  }
+}
+
+.footer-section {
+  font-size: 12px;
+  margin-top: 200px;
+
+  .footer-title {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .footer-body {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 22px
+  }
+
+  .payment-options-block {
+    width: 389px;
+    border: 2px solid #084F98;
+    padding: 7px 7px 20px 7px;
+
+    .payment-title {
+      font-size: 13px;
+      line-height: 17px;
+    }
+
+    .options-wrapper {
+      padding: 5px 10px;
+
+      .payment-text {
+        line-height: 15px;
+
+        &+.payment-option {
+          padding-top: 8px;
+        }
+      }
+    }
+
+    .payment-option {
+      span:first-child {
+        width: 112px;
+        display: inline-block;
+
+        &:not(.title) {
+          padding-top: 8px;
+        }
+      }
+
+      .title {
+        font-size: 17px;
+        line-height: 23px;
+      }
+
+      .text-bold {
+        font-size: 16px;
+      }
+    }
+
+    .special-option {
+      padding-top: 10px;
+
+      .description {
+        line-height: 12px;
+        padding-top: 4px;
+      }
+    }
+  }
+
+  .payment-summary-block {
+    .summary-wrapper {
+      background-color: #ccc;
+      padding: 0 15px 5px 15px;
+      border-radius: 8px;
+      width: 320px;
+
+      .info-item {
+        display: flex;
+        justify-content: space-between;
+        line-height: 17px;
+
+        &:last-child {
+          padding-top: 20px;
+        }
+      }
+    }
+
+    .payment-request {
+      line-height: 12px;
+      padding: 3px 0 0 15px;
+    }
+
+    .client {
+      padding: 43px 0 0 30px;
+      font-size: 13px;
+      line-height: 16px;
+
+      .name {
+        font-weight: 700;
+      }
+    }
   }
 }
