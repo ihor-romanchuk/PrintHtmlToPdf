@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 
 class App extends Component {
@@ -84,7 +83,8 @@ class App extends Component {
       },
       tableData: {
         columns: data.tableenglish.columns,
-        rows: data.tableenglish.rows
+        rows: data.tableenglish.rows,
+        continueTableText: "continued from previous page..."
       },
       footerData: {
         infoTitle: data.texts.couponenglish,
@@ -282,6 +282,7 @@ class Table extends Component {
     let contactsData = Object.assign({}, this.props.contactsData, { setHeight: (newHeight) => {
       this.setState({height: newHeight});
     } });
+
     return (
       <div className="table-section">
         <table>
@@ -292,6 +293,12 @@ class Table extends Component {
               </td>
             </tr>
             <ColumnsList columns={this.props.tableData.columns}></ColumnsList>
+            <tr>
+              <td></td>
+              <td className="continue-table" colSpan={this.props.tableData.columns.length - 1}>
+                <i>{this.props.tableData.continueTableText}</i>
+              </td>
+            </tr>
           </thead>
           <tbody>
             <tr style={{height: this.state.height}} className="header-overlay">
@@ -309,8 +316,10 @@ class Table extends Component {
               return (
                 <tr key={index}>
                   {row.map((cell, index) => {
+                    let bottomBorder = "<div class='bottom-border'></div>";
+
                     return (
-                      <td key={index} dangerouslySetInnerHTML={{ __html: cell }}></td>
+                      <td key={index} dangerouslySetInnerHTML={{ __html: cell + bottomBorder }}></td>
                     );
                   })}
                 </tr>
