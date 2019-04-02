@@ -1,0 +1,1 @@
+web: cd html-to-pdf && npm start
