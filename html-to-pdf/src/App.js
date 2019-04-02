@@ -82,13 +82,9 @@ class App extends Component {
           }
         ]
       },
-      tableHeaderData: {
-
-      },
       tableData: {
-        items: [
-
-        ]
+        columns: data.tableenglish.columns,
+        rows: data.tableenglish.rows
       },
       footerData: {
         infoTitle: data.texts.couponenglish,
@@ -164,7 +160,7 @@ class App extends Component {
           <Header {...data.headerData}></Header>
           <Contacts {...data.contactsData}></Contacts>
           <AdditionalInfo {...data.additionalInfoData}></AdditionalInfo>
-          <Table header={data.tableHeaderData} data={data.tableData}></Table>
+          <Table {...data.tableData}></Table>
           <Footer {...data.footerData}></Footer>
         </div>
       </div>
@@ -181,9 +177,9 @@ const Header = props => {
       </div>
       <div className="reference-box">
         <div className="title" style={{ color: props.referenceInfo.titleFontColor }}>{props.referenceInfo.title} {props.referenceInfo.number}</div>
-        {props.referenceInfo.info.map(p => {
+        {props.referenceInfo.info.map((p, index) => {
           return (
-            <div>
+            <div key={index}>
               {p.title && <span>{p.title}</span>}
               {p.value && <span>{p.value}</span>}
             </div>
@@ -211,9 +207,9 @@ const Contacts = props => {
         </div>
       </div>
       <div className="options">
-        {props.contactOptions.map(option => {
+        {props.contactOptions.map((option, index) => {
           return (
-            <div className="option">
+            <div key={index} className="option">
               <div className="icon-wrapper">
                 {option.imageSrc && <img src={option.imageSrc} />}
               </div>
@@ -235,13 +231,13 @@ const Contacts = props => {
 const AdditionalInfo = props => {
   return (
     <div className="additional-info-section">
-      {props.items.map(item => {
+      {props.items.map((item, index) => {
         return (
-          <div>
+          <div key={index}>
             <div className="title-wrapper">
               <span className="title" style={{ color: props.titleFontColor }}>{item.title}</span>
             </div>
-            <div className="text">{item.text}</div>
+            <div className="text" dangerouslySetInnerHTML={{ __html: item.text }}></div>
           </div>
         );
       })}
@@ -249,31 +245,33 @@ const AdditionalInfo = props => {
   );
 };
 
-const TableHeader = props => {
-  return (
-    <div>
-      <div>TableHeader goes here</div>
-      <div>table continues here text (DO NOT FORGET!)</div>
-    </div>
-  );
-};
-
-const TableItem = props => {
-  return (
-    <div className="table-item">TableItem goes here</div>
-  );
-};
-
 const Table = props => {
   return (
-    <div className="table">
-      <TableHeader {...props.header}></TableHeader>
-      {props.data.items.map(item => {
-        return (
-          <TableItem {...item}></TableItem>
-        );
-      })
-      }
+    <div className="table-section">
+      <table>
+        <thead>
+          <tr>
+            {props.columns.map((column, index) => {
+              return (
+                <td key={index} dangerouslySetInnerHTML={{ __html: column }}></td>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {props.rows.map((row, index) => {
+            return (
+              <tr key={index}>
+                {row.map((cell, index) => {
+                  return (
+                    <td key={index} dangerouslySetInnerHTML={{ __html: cell }}></td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -287,9 +285,9 @@ const Footer = props => {
           <div className="payment-title button-blue">{props.paymentOptions.paymentTitle}</div>
           <div className="options-wrapper">
             <div className="payment-text" dangerouslySetInnerHTML={{ __html: props.paymentOptions.paymentText }}></div>
-            {props.paymentOptions.options.map(option => {
+            {props.paymentOptions.options.map((option, index) => {
               return (
-                <div className="payment-option">
+                <div key={index} className="payment-option">
                   <span className={option.isTitleHighlighted && "title"} style={option.isTitleHighlighted ? { color: props.titleFontColor } : {}}>{option.title}</span>
                   <span className={option.isValueHighlighted && "text-bold"}>{option.value}</span>
                 </div>
@@ -303,9 +301,9 @@ const Footer = props => {
         </div>
         <div className="payment-summary-block">
           <div className="summary-wrapper">
-            {props.paymentSummary.referenceInfo.map(item => {
+            {props.paymentSummary.referenceInfo.map((item, index) => {
               return (
-                <div className="info-item">
+                <div key={index} className="info-item">
                   <span>{item.title}</span>
                   <span>{item.value}</span>
                 </div>
