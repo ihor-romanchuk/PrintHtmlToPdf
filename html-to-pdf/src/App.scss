@@ -23,25 +23,27 @@
   @media print {
     -webkit-print-color-adjust: exact;
 
-    .footer-section {
-      page-break-inside : avoid;
+    body {
+      margin: 0px;
     }
 
-    .table {
-      page-break-inside: auto;
+    .footer-section {
+      page-break-inside: avoid;
     }
   }
 }
 
 .main-container {
   width: 816px;
-  padding: 17px 11px 0 11px;
+  padding: 0 11px;
 }
 
 .header-section {
   display: flex;
   justify-content: space-between;
   font-size: 12px;
+  padding: 17px 0 3px;
+  text-align: left;
 
   .logo-block {
     padding: 5px 0 0 36px;
@@ -87,13 +89,14 @@
 }
 
 .contacts-section {
-  $icon-width: 30px;
-  $icon-height: 30px;
+  $icon-width: 35px;
+  $icon-height: 35px;
 
   font-size: 12px;
   display: flex;
   justify-content: space-between;
-  padding-top: 17px;
+  text-align: left;
+  padding-top: 20px;
 
   .contact-info-wrapper {
     padding-left: 82px;
@@ -111,6 +114,11 @@
       vertical-align: top;
       width: $icon-width;
       height: $icon-height;
+
+      img {
+        width: 100%;
+        margin-top: -7px;
+      }
     }
 
     .info-wrapper {
@@ -138,7 +146,8 @@
 .additional-info-section {
   display: flex;
   justify-content: space-between;
-  padding-top: 2px;
+  padding-bottom: 10px;
+  text-align: left;
 
   &>div {
     display: inline-block;
@@ -170,13 +179,11 @@
 }
 
 .table-section {
-  padding-top: 10px;
-
   table {
+    padding-top: 10px;
     border-collapse: collapse;
     width: 100%;
-    font-size: 14px;
-    line-height: 13px;
+    position: relative;
 
     td {
       &:first-child {
@@ -196,16 +203,39 @@
         text-align: right;
         width: 80px;
       }
+    }
 
-      &:last-child {
-        text-align: right;
-        padding-right: 15px;
+    .columns-list {
+      background-color: #ccc;
+      line-height: 13px;
+      font-size: 14px;
+
+      &,
+      &~tr {
+        td:last-child {
+          text-align: right;
+          padding-right: 15px;
+        }
+      }
+
+      td {
+        vertical-align: middle;
+        padding: 5px 0;
+      }
+
+      &~tr {
+        line-height: 13px;
+        font-size: 14px;
+
+        td {
+          border-bottom: 1px solid black;
+          padding: 10px 0;
+        }
       }
     }
   }
 
   thead {
-    background-color: #ccc;
     text-align: center;
     line-height: 17px;
 
@@ -221,10 +251,21 @@
   }
 
   tbody {
+    .header-overlay {
+      td {
+        position: absolute;
+        width: 100%;
+        background-color: white;
+        top: 166px;
+      }
+    }
+
     td {
-      border-bottom: 1px solid black;
-      padding: 10px 0;
       vertical-align: top;
+
+      tab {
+        padding-left: 13px;
+      }
     }
   }
 }

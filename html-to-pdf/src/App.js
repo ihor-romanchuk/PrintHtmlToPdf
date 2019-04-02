@@ -60,7 +60,7 @@ class App extends Component {
             value: data.texts.value9english1,
             description: data.texts.value9english2
           }, {
-            imageSrc: "moneyIcon.png",
+            imageSrc: "dollarIcon.png",
             title: data.headers.header13english,
             description: data.texts.value13english
           }, {
@@ -157,10 +157,10 @@ class App extends Component {
     return (
       <div className="app">
         <div className="main-container">
-          <Header {...data.headerData}></Header>
-          <Contacts {...data.contactsData}></Contacts>
-          <AdditionalInfo {...data.additionalInfoData}></AdditionalInfo>
-          <Table {...data.tableData}></Table>
+          <Table headerData={data.headerData}
+            contactsData={data.contactsData}
+            additionalInfoData={data.additionalInfoData}
+            tableData={data.tableData}></Table>
           <Footer {...data.footerData}></Footer>
         </div>
       </div>
@@ -196,36 +196,48 @@ const Header = props => {
   );
 }
 
-const Contacts = props => {
-  return (
-    <div className="contacts-section">
-      <div className="contact-info-wrapper">
-        <div className="info">
-          <div>{props.contactInfo.name}</div>
-          <div>{props.contactInfo.address1} {props.contactInfo.address2}</div>
-          <div>{props.contactInfo.city}, {props.contactInfo.state} {props.contactInfo.postalCode}</div>
+class Contacts extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    var style = window.getComputedStyle(document.querySelector(".contacts-section"), null);
+    const height = style.getPropertyValue("height").replace("px", "") - style.getPropertyValue("padding-top").replace("px", "") - style.getPropertyValue("padding-bottom").replace("px", "");
+    this.props.setHeight(height);
+  }
+
+  render() {
+    return (
+      <div className="contacts-section">
+        <div className="contact-info-wrapper">
+          <div className="info">
+            <div>{this.props.contactInfo.name}</div>
+            <div>{this.props.contactInfo.address1} {this.props.contactInfo.address2}</div>
+            <div>{this.props.contactInfo.city}, {this.props.contactInfo.state} {this.props.contactInfo.postalCode}</div>
+          </div>
+        </div>
+        <div className="options">
+          {this.props.contactOptions.map((option, index) => {
+            return (
+              <div key={index} className="option">
+                <div className="icon-wrapper">
+                  {option.imageSrc && <img src={option.imageSrc} />}
+                </div>
+                <div className="info-wrapper">
+                  <div className="title-wrapper">
+                    <span className="title" style={{ color: this.props.titleFontColor }}>{option.title}</span>
+                    {option.value && <span className="value">{option.value}</span>}
+                  </div>
+                  {option.description && <div className="description">{option.description}</div>}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-      <div className="options">
-        {props.contactOptions.map((option, index) => {
-          return (
-            <div key={index} className="option">
-              <div className="icon-wrapper">
-                {option.imageSrc && <img src={option.imageSrc} />}
-              </div>
-              <div className="info-wrapper">
-                <div className="title-wrapper">
-                  <span className="title" style={{ color: props.titleFontColor }}>{option.title}</span>
-                  {option.value && <span className="value">{option.value}</span>}
-                </div>
-                {option.description && <div className="description">{option.description}</div>}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 const AdditionalInfo = props => {
@@ -245,35 +257,70 @@ const AdditionalInfo = props => {
   );
 };
 
-const Table = props => {
+const ColumnsList = props => {
   return (
-    <div className="table-section">
-      <table>
-        <thead>
-          <tr>
-            {props.columns.map((column, index) => {
+    <tr className="columns-list">
+      {props.columns.map((column, index) => {
+        return (
+          <td key={index} dangerouslySetInnerHTML={{ __html: column }}></td>
+        );
+      })}
+    </tr>
+  );
+}
+
+class Table extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      height: 0
+    }
+  }
+
+  render() {
+    let contactsData = Object.assign({}, this.props.contactsData, { setHeight: (newHeight) => {
+      this.setState({height: newHeight});
+    } });
+    return (
+      <div className="table-section">
+        <table>
+          <thead>
+            <tr>
+              <td colSpan={this.props.tableData.columns.length}>
+                <Header {...this.props.headerData}></Header>
+              </td>
+            </tr>
+            <ColumnsList columns={this.props.tableData.columns}></ColumnsList>
+          </thead>
+          <tbody>
+            <tr style={{height: this.state.height}} className="header-overlay">
+              <td colSpan={this.props.tableData.columns.length}>
+                <Contacts {...contactsData}></Contacts>
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={this.props.tableData.columns.length}>
+                <AdditionalInfo {...this.props.additionalInfoData}></AdditionalInfo>
+              </td>
+            </tr>
+            <ColumnsList columns={this.props.tableData.columns}></ColumnsList>
+            {this.props.tableData.rows.map((row, index) => {
               return (
-                <td key={index} dangerouslySetInnerHTML={{ __html: column }}></td>
+                <tr key={index}>
+                  {row.map((cell, index) => {
+                    return (
+                      <td key={index} dangerouslySetInnerHTML={{ __html: cell }}></td>
+                    );
+                  })}
+                </tr>
               );
             })}
-          </tr>
-        </thead>
-        <tbody>
-          {props.rows.map((row, index) => {
-            return (
-              <tr key={index}>
-                {row.map((cell, index) => {
-                  return (
-                    <td key={index} dangerouslySetInnerHTML={{ __html: cell }}></td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 };
 
 const Footer = props => {
