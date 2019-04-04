@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import './App.scss';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+  }
+
   mapData(data) {
     return {
+      font: data.font,
       headerData: {
         logoSrc: data.logo,
         address1: data.client.address1,
@@ -30,7 +35,7 @@ class App extends Component {
             },
             {
               title: data.headers.header5english,
-              value: data.texts.value5english1
+              value: data.texts.value5english1 + " " + data.texts.value5english2
             }
           ],
           amount: {
@@ -130,7 +135,7 @@ class App extends Component {
             },
             {
               title: data.headers.header5english,
-              value: data.texts.value5english1
+              value: data.texts.value5english1 + " " + data.texts.value5english2
             },
             {
               title: data.headers.header7english,
@@ -155,7 +160,7 @@ class App extends Component {
     let data = this.mapData(window.data);
 
     return (
-      <div className="app">
+      <div style={{fontFamily: data.font}} className="app">
         <div className="main-container">
           <Table headerData={data.headerData}
             contactsData={data.contactsData}
@@ -332,50 +337,58 @@ class Table extends Component {
   }
 };
 
-const Footer = props => {
-  return (
-    <div className="footer-section">
-      <div className="footer-title">{props.infoTitle}</div>
-      <div className="footer-body">
-        <div className="payment-options-block">
-          <div className="payment-title button-blue">{props.paymentOptions.paymentTitle}</div>
-          <div className="options-wrapper">
-            <div className="payment-text" dangerouslySetInnerHTML={{ __html: props.paymentOptions.paymentText }}></div>
-            {props.paymentOptions.options.map((option, index) => {
-              return (
-                <div key={index} className="payment-option">
-                  <span className={option.isTitleHighlighted && "title"} style={option.isTitleHighlighted ? { color: props.titleFontColor } : {}}>{option.title}</span>
-                  <span className={option.isValueHighlighted && "text-bold"}>{option.value}</span>
+class Footer extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="footer-section">
+        <div className="fixed-content">
+          <div className="footer-title">{this.props.infoTitle}</div>
+          <div className="footer-body">
+            <div className="payment-options-block">
+              <div className="payment-title button-blue">{this.props.paymentOptions.paymentTitle}</div>
+              <div className="options-wrapper">
+                <div className="payment-text" dangerouslySetInnerHTML={{ __html: this.props.paymentOptions.paymentText }}></div>
+                {this.props.paymentOptions.options.map((option, index) => {
+                  return (
+                    <div key={index} className="payment-option">
+                      <span className={option.isTitleHighlighted && "title"} style={option.isTitleHighlighted ? { color: this.props.titleFontColor } : {}}>{option.title}</span>
+                      <span className={option.isValueHighlighted && "text-bold"}>{option.value}</span>
+                    </div>
+                  );
+                })}
+                <div className="special-option">
+                  <div className="title" dangerouslySetInnerHTML={{ __html: this.props.paymentOptions.specialOption.title }}></div>
+                  <div className="description" dangerouslySetInnerHTML={{ __html: this.props.paymentOptions.specialOption.value }}></div>
                 </div>
-              );
-            })}
-            <div className="special-option">
-              <div className="title" dangerouslySetInnerHTML={{ __html: props.paymentOptions.specialOption.title }}></div>
-              <div className="description" dangerouslySetInnerHTML={{ __html: props.paymentOptions.specialOption.value }}></div>
+              </div>
+            </div>
+            <div className="payment-summary-block">
+              <div className="summary-wrapper">
+                {this.props.paymentSummary.referenceInfo.map((item, index) => {
+                  return (
+                    <div key={index} className="info-item">
+                      <span>{item.title}</span>
+                      <span>{item.value}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="payment-request" dangerouslySetInnerHTML={{ __html: this.props.paymentSummary.paymentRequestHtml }}></div>
+              <div className="client">
+                <div className="name">{this.props.paymentSummary.client.name}</div>
+                <div>{this.props.paymentSummary.client.address1} {this.props.paymentSummary.client.address2}</div>
+                <div>{this.props.paymentSummary.client.city}, {this.props.paymentSummary.client.state} {this.props.paymentSummary.client.postalCode}</div>
+              </div>
             </div>
           </div>
         </div>
-        <div className="payment-summary-block">
-          <div className="summary-wrapper">
-            {props.paymentSummary.referenceInfo.map((item, index) => {
-              return (
-                <div key={index} className="info-item">
-                  <span>{item.title}</span>
-                  <span>{item.value}</span>
-                </div>
-              );
-            })}
-          </div>
-          <div className="payment-request" dangerouslySetInnerHTML={{ __html: props.paymentSummary.paymentRequestHtml }}></div>
-          <div className="client">
-            <div className="name">{props.paymentSummary.client.name}</div>
-            <div>{props.paymentSummary.client.address1} {props.paymentSummary.client.address2}</div>
-            <div>{props.paymentSummary.client.city}, {props.paymentSummary.client.state} {props.paymentSummary.client.postalCode}</div>
-          </div>
-        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default App;
