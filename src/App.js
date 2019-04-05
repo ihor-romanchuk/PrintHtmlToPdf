@@ -288,6 +288,8 @@ class Table extends Component {
       this.setState({height: newHeight});
     } });
 
+    let totalPages = 3;//todo: calculate pages.
+
     return (
       <div className="table-section">
         <table>
@@ -331,11 +333,37 @@ class Table extends Component {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr>
+              <td className="paging-placeholder" colSpan={this.props.tableData.columns.length}>
+              </td>
+            </tr>
+          </tfoot>
         </table>
+        <Paging totalPages={totalPages}></Paging>
       </div>
     );
   }
 };
+
+class Paging extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="paging-container">
+        {Array(this.props.totalPages).fill().map((e, index) => {
+          let bottomStyle = "calc(" + (-index * 100) + "vh" + " + 10px)";
+          return (
+            <span style={{bottom: bottomStyle}} className="paging-item">Page {index + 1} of {this.props.totalPages}</span>
+          );
+        })}
+      </div>
+    );
+  }
+}
 
 class Footer extends Component {
   constructor(props) {
