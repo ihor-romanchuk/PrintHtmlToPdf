@@ -165,8 +165,9 @@ class App extends Component {
     const pagingHeight = 45;
     const headerHeight = 235;
     const footerMargin = 85;
+    const overhead = 0;
 
-    let initialContentHeight = document.querySelector(".main-container").offsetHeight;
+    let initialContentHeight = document.querySelector(".main-container").offsetHeight - pagingHeight;
     let footerSectionHeight = document.querySelector(".footer-section").offsetHeight;
     let viewportHeight = window.innerHeight;
 
@@ -176,12 +177,12 @@ class App extends Component {
 
     do {
       pendingTotalPages = totalPages;
-      totalHeight = initialContentHeight + footerMargin + (pendingTotalPages - 1) * (headerHeight + pagingHeight);
+      totalHeight = initialContentHeight + footerMargin + (pendingTotalPages - 1) * (headerHeight + pagingHeight + overhead);//should differ on initial step as footerMargin is only on last page
       totalPages = Math.ceil(totalHeight / viewportHeight);
     }
     while (totalPages !== pendingTotalPages);
-
-    let isFooterSplittedBeetwenPages = totalPages * viewportHeight - footerSectionHeight > totalHeight || totalHeight > totalPages * viewportHeight;
+    debugger;
+    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin + pagingHeight) < (totalPages - 1) * viewportHeight; //smth wrong here
     
     return {
       totalPages: totalPages,
