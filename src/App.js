@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      isTest: true,
+      isTest: false,
       totalPages: 1,
       isFooterSplittedBeetwenPages: false,
       calculatedTotalHeight: 0
@@ -168,34 +168,55 @@ class App extends Component {
     const pagingHeight = 45;
     const headerHeight = 235;
     const footerMargin = 85;
-    const pageHeight = 1055;
+    const pageHeight = 1056;
+    const overhead = 9;
 
     let initialContentHeight = document.querySelector(".main-container").offsetHeight - pagingHeight;
     let footerSectionHeight = document.querySelector(".footer-section").offsetHeight;
     
     let pendingTotalPages;
-    let totalHeight;
+    let totalHeight = initialContentHeight;
     let totalPages = 1;
+
+    function totalHeightWithoutFooter() {
+      return totalHeight - footerSectionHeight - footerMargin;
+    }
+    function isFooterSplittedBeetwenPages() {
+      let heightOfContentWithFooterOnLastPage = totalHeight % pageHeight;
+      return heightOfContentWithFooterOnLastPage < footerSectionHeight + footerMargin + pagingHeight;
+    }
+    function isTableSplittedBeetwenPages() {
+      return totalHeightWithoutFooter() > (totalPages - 1) * pageHeight;
+    }
 
     do {
       pendingTotalPages = totalPages;
-      let timesHeaderShown = pendingTotalPages - 1 -
-        (initialContentHeight - footerSectionHeight - pagingHeight <= (totalPages - 1) * pageHeight ? 
-          pendingTotalPages > 1 ? 
-            1: 0:
-          0);
+      let timesHeaderShown = Math.max(0, totalPages - 2);
+
       totalHeight = initialContentHeight + footerMargin + 
         timesHeaderShown * headerHeight + 
-        (pendingTotalPages - 1) * pagingHeight;
+        (totalPages - (isFooterSplittedBeetwenPages() ? 1: 0)) * pagingHeight +
+        overhead * (totalPages - 1);
+
+      timesHeaderShown = totalPages - 1 -
+      (isTableSplittedBeetwenPages() ? 
+        0:
+        (totalPages > 1 ? 
+          1: 
+          0));
+
+      totalHeight = initialContentHeight + footerMargin + 
+        timesHeaderShown * headerHeight + 
+        (totalPages - (isFooterSplittedBeetwenPages() ? 1: 0)) * pagingHeight +
+        overhead * (totalPages - 1);
+
       totalPages = Math.ceil(totalHeight / pageHeight);
     }
-    while (totalPages !== pendingTotalPages);
-
-    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin) < (totalPages - 1) * pageHeight;
+    while (totalPages > pendingTotalPages);
 
     let result = {
       totalPages: totalPages,
-      isFooterSplittedBeetwenPages: isFooterSplittedBeetwenPages
+      isFooterSplittedBeetwenPages: isFooterSplittedBeetwenPages()
     }
 
     if(this.state.isTest) {
@@ -203,7 +224,7 @@ class App extends Component {
         initialContentHeight: initialContentHeight,
         totalPagesHeight: totalPages * pageHeight,
         calculatedTotalHeight: totalHeight,
-        calcualtedTotalHeightWithoutFooter: totalHeight - (footerSectionHeight + footerMargin)
+        calcualtedTotalHeightWithoutFooter: totalHeightWithoutFooter()
       });
     }
 
