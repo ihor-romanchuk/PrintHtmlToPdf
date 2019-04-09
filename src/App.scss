@@ -51,7 +51,7 @@ $footer-section-padding-bottom: 85px;
     .footer-section {
       page-break-inside: auto;
       height: #{$footer-section-height + $footer-section-padding-bottom};
-      background-color: grey;
+      
 
       &.with-background {
         background-color: white;
