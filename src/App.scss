@@ -51,6 +51,7 @@ $footer-section-padding-bottom: 85px;
     .footer-section {
       page-break-inside: auto;
       height: #{$footer-section-height + $footer-section-padding-bottom};
+      background-color: grey;
 
       &.with-background {
         background-color: white;
@@ -70,6 +71,36 @@ $footer-section-padding-bottom: 85px;
     tr {
       display: block;
       page-break-before: auto;
+    }
+  }
+}
+
+.test-height {
+  $width: 15px;
+
+  top: 0;
+  page-break-inside: auto;
+
+  &>* {
+    position: absolute;
+    width: $width;
+    color: white;
+    background-color: black;
+    word-break: break-all;
+    z-index: 9999;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: right;
+
+    &:nth-child(even) {
+      color: black;
+      background-color: #19ff00;
+    }
+
+    @for $i from 0 through 10 {
+      &:nth-child(#{$i + 1}) {
+        left: $i*$width;
+      }
     }
   }
 }

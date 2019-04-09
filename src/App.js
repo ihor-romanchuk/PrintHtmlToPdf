@@ -7,8 +7,10 @@ class App extends Component {
     super(props);
 
     this.state = {
+      isTest: true,
       totalPages: 1,
-      isFooterSplittedBeetwenPages: false
+      isFooterSplittedBeetwenPages: false,
+      calculatedTotalHeight: 0
     };
   }
 
@@ -167,7 +169,7 @@ class App extends Component {
     const headerHeight = 235;
     const footerMargin = 85;
     const pageHeight = 1055;
-    const overhead = 13;
+    const overhead = 0;
 
     let initialContentHeight = document.querySelector(".main-container").offsetHeight - pagingHeight;
     let footerSectionHeight = document.querySelector(".footer-section").offsetHeight;
@@ -183,12 +185,23 @@ class App extends Component {
     }
     while (totalPages !== pendingTotalPages);
 
-    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin + pagingHeight) < (totalPages - 1) * pageHeight;
+    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin) < (totalPages - 1) * pageHeight;
 
-    return {
+    let result = {
       totalPages: totalPages,
       isFooterSplittedBeetwenPages: isFooterSplittedBeetwenPages
-    };
+    }
+
+    if(this.state.isTest) {
+      Object.assign(result, {
+        initialContentHeight: initialContentHeight,
+        totalPagesHeight: totalPages * pageHeight,
+        calculatedTotalHeight: totalHeight,
+        calcualtedTotalHeightWithoutFooter: totalHeight - (footerSectionHeight + footerMargin)
+      });
+    }
+
+    return result;
   };
 
   componentDidMount() {
@@ -196,7 +209,12 @@ class App extends Component {
       let printRelatedCalculations = this.performPrintRelatedCalculations();
       this.setState({
         totalPages: printRelatedCalculations.totalPages,
-        isFooterSplittedBeetwenPages: printRelatedCalculations.isFooterSplittedBeetwenPages
+        isFooterSplittedBeetwenPages: printRelatedCalculations.isFooterSplittedBeetwenPages,
+
+        initialContentHeight: printRelatedCalculations.initialContentHeight,
+        totalPagesHeight: printRelatedCalculations.totalPagesHeight,
+        calculatedTotalHeight: printRelatedCalculations.calculatedTotalHeight,
+        calcualtedTotalHeightWithoutFooter: printRelatedCalculations.calcualtedTotalHeightWithoutFooter
       });
     });
   }
@@ -206,6 +224,12 @@ class App extends Component {
 
     return (
       <div style={{fontFamily: data.font}} className="app">
+        {this.state.isTest && <div className="test-height">
+          <div style={{height: this.state.initialContentHeight}}>initialContentHeight</div>
+          <div style={{height: this.state.totalPagesHeight}}>totalPagesHeight</div>
+          <div style={{height: this.state.calculatedTotalHeight}}>calculatedTotalHeight</div>
+          <div style={{height: this.state.calcualtedTotalHeightWithoutFooter}}>calcualtedTotalHeightWithoutFooter</div>
+        </div>}
         <div className="main-container">
           <Table headerData={data.headerData}
             contactsData={data.contactsData}
