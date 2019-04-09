@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.scss';
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+
+    this.state = {
+      isTest: false,
+      totalPages: 1,
+      isFooterSplittedBeetwenPages: false,
+      calculatedTotalHeight: 0
+    };
   }
 
   mapData(data) {
@@ -156,17 +164,106 @@ class App extends Component {
     };
   }
 
+  performPrintRelatedCalculations() {
+    const pagingHeight = 45;
+    const headerHeight = 235;
+    const footerMargin = 85;
+    const pageHeight = 1056;
+    const overhead = 9;
+
+    let initialContentHeight = document.querySelector(".main-container").offsetHeight - pagingHeight;
+    let footerSectionHeight = document.querySelector(".footer-section").offsetHeight;
+    
+    let pendingTotalPages;
+    let totalHeight = initialContentHeight;
+    let totalPages = 1;
+
+    function totalHeightWithoutFooter() {
+      return totalHeight - footerSectionHeight - footerMargin;
+    }
+    function isFooterSplittedBeetwenPages() {
+      let heightOfContentWithFooterOnLastPage = totalHeight % pageHeight;
+      return heightOfContentWithFooterOnLastPage < footerSectionHeight + footerMargin + pagingHeight;
+    }
+    function isTableSplittedBeetwenPages() {
+      return totalHeightWithoutFooter() > (totalPages - 1) * pageHeight;
+    }
+
+    do {
+      pendingTotalPages = totalPages;
+      let timesHeaderShown = Math.max(0, totalPages - 2);
+
+      totalHeight = initialContentHeight + footerMargin + 
+        timesHeaderShown * headerHeight + 
+        (totalPages - (isFooterSplittedBeetwenPages() ? 1: 0)) * pagingHeight +
+        overhead * (totalPages - 1);
+
+      timesHeaderShown = totalPages - 1 -
+      (isTableSplittedBeetwenPages() ? 
+        0:
+        (totalPages > 1 ? 
+          1: 
+          0));
+
+      totalHeight = initialContentHeight + footerMargin + 
+        timesHeaderShown * headerHeight + 
+        (totalPages - (isFooterSplittedBeetwenPages() ? 1: 0)) * pagingHeight +
+        overhead * (totalPages - 1);
+
+      totalPages = Math.ceil(totalHeight / pageHeight);
+    }
+    while (totalPages > pendingTotalPages);
+
+    let result = {
+      totalPages: totalPages,
+      isFooterSplittedBeetwenPages: isFooterSplittedBeetwenPages()
+    }
+
+    if(this.state.isTest) {
+      Object.assign(result, {
+        initialContentHeight: initialContentHeight,
+        totalPagesHeight: totalPages * pageHeight,
+        calculatedTotalHeight: totalHeight,
+        calcualtedTotalHeightWithoutFooter: totalHeightWithoutFooter()
+      });
+    }
+
+    return result;
+  };
+
+  componentDidMount() {
+    setTimeout(() => {
+      let printRelatedCalculations = this.performPrintRelatedCalculations();
+      this.setState({
+        totalPages: printRelatedCalculations.totalPages,
+        isFooterSplittedBeetwenPages: printRelatedCalculations.isFooterSplittedBeetwenPages,
+
+        initialContentHeight: printRelatedCalculations.initialContentHeight,
+        totalPagesHeight: printRelatedCalculations.totalPagesHeight,
+        calculatedTotalHeight: printRelatedCalculations.calculatedTotalHeight,
+        calcualtedTotalHeightWithoutFooter: printRelatedCalculations.calcualtedTotalHeightWithoutFooter
+      });
+    });
+  }
+
   render() {
     let data = this.mapData(window.data);
 
     return (
       <div style={{fontFamily: data.font}} className="app">
+        {this.state.isTest && <div className="test-height">
+          <div style={{height: this.state.initialContentHeight}}>initialContentHeight</div>
+          <div style={{height: this.state.totalPagesHeight}}>totalPagesHeight</div>
+          <div style={{height: this.state.calculatedTotalHeight}}>calculatedTotalHeight</div>
+          <div style={{height: this.state.calcualtedTotalHeightWithoutFooter}}>calcualtedTotalHeightWithoutFooter</div>
+        </div>}
         <div className="main-container">
           <Table headerData={data.headerData}
             contactsData={data.contactsData}
             additionalInfoData={data.additionalInfoData}
-            tableData={data.tableData}></Table>
-          <Footer {...data.footerData}></Footer>
+            tableData={data.tableData}
+            totalPages={this.state.totalPages}></Table>
+          <Footer {...data.footerData} isSplitted={this.state.isFooterSplittedBeetwenPages}></Footer>
         </div>
       </div>
     );
@@ -177,7 +274,7 @@ const Header = props => {
   return (
     <div className="header-section">
       <div className="logo-block">
-        <img src={props.logoSrc} className="logo"></img>
+        <img src={props.logoSrc} className="logo" alt=""></img>
         <div className="address">{props.address1} {props.address2} {props.city}, {props.state} {props.postalCode}</div>
       </div>
       <div className="reference-box">
@@ -202,10 +299,6 @@ const Header = props => {
 }
 
 class Contacts extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     var style = window.getComputedStyle(document.querySelector(".contacts-section"), null);
     const height = style.getPropertyValue("height").replace("px", "") - style.getPropertyValue("padding-top").replace("px", "") - style.getPropertyValue("padding-bottom").replace("px", "");
@@ -227,7 +320,7 @@ class Contacts extends Component {
             return (
               <div key={index} className="option">
                 <div className="icon-wrapper">
-                  {option.imageSrc && <img src={option.imageSrc} />}
+                  {option.imageSrc && <img src={option.imageSrc} alt=""/>}
                 </div>
                 <div className="info-wrapper">
                   <div className="title-wrapper">
@@ -331,20 +424,38 @@ class Table extends Component {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr>
+              <td className="paging-placeholder" colSpan={this.props.tableData.columns.length}>
+              </td>
+            </tr>
+          </tfoot>
         </table>
+        <Paging totalPages={this.props.totalPages}></Paging>
       </div>
     );
   }
 };
 
-class Footer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+class Paging extends Component {
   render() {
     return (
-      <div className="footer-section">
+      <div className="paging-container">
+        {Array.from({length: this.props.totalPages}, (_, index) => {
+          let bottomStyle = "calc(" + (-index * 100) + "vh" + " + 15px)";
+          return (
+            <span key={index} style={{bottom: bottomStyle}} className="paging-item">Page {index + 1} of {this.props.totalPages}</span>
+          );
+        })}
+      </div>
+    );
+  }
+}
+
+class Footer extends Component {
+  render() {
+    return (
+      <div className={`footer-section ${this.props.isSplitted ? "with-background": ""}`}>
         <div className="fixed-content">
           <div className="footer-title">{this.props.infoTitle}</div>
           <div className="footer-body">
