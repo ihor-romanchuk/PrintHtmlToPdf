@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.scss';
 
 class App extends Component {
@@ -165,25 +166,25 @@ class App extends Component {
     const pagingHeight = 45;
     const headerHeight = 235;
     const footerMargin = 85;
-    const overhead = 0;
+    const pageHeight = 1055;
+    const overhead = 13;
 
     let initialContentHeight = document.querySelector(".main-container").offsetHeight - pagingHeight;
     let footerSectionHeight = document.querySelector(".footer-section").offsetHeight;
-    let viewportHeight = window.innerHeight;
-
+    
     let pendingTotalPages;
     let totalHeight;
     let totalPages = 1;
 
     do {
       pendingTotalPages = totalPages;
-      totalHeight = initialContentHeight + footerMargin + (pendingTotalPages - 1) * (headerHeight + pagingHeight + overhead);//should differ on initial step as footerMargin is only on last page
-      totalPages = Math.ceil(totalHeight / viewportHeight);
+      totalHeight = initialContentHeight + footerMargin + (pendingTotalPages - 1) * (headerHeight + pagingHeight + overhead);
+      totalPages = Math.ceil(totalHeight / pageHeight);
     }
     while (totalPages !== pendingTotalPages);
-    debugger;
-    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin + pagingHeight) < (totalPages - 1) * viewportHeight; //smth wrong here
-    
+
+    let isFooterSplittedBeetwenPages = totalHeight - (footerSectionHeight + footerMargin + pagingHeight) < (totalPages - 1) * pageHeight;
+
     return {
       totalPages: totalPages,
       isFooterSplittedBeetwenPages: isFooterSplittedBeetwenPages
@@ -191,10 +192,12 @@ class App extends Component {
   };
 
   componentDidMount() {
-    let printRelatedCalculations = this.performPrintRelatedCalculations()
-    this.setState({
-      totalPages: printRelatedCalculations.totalPages,
-      isFooterSplittedBeetwenPages: printRelatedCalculations.isFooterSplittedBeetwenPages
+    setTimeout(() => {
+      let printRelatedCalculations = this.performPrintRelatedCalculations();
+      this.setState({
+        totalPages: printRelatedCalculations.totalPages,
+        isFooterSplittedBeetwenPages: printRelatedCalculations.isFooterSplittedBeetwenPages
+      });
     });
   }
 
