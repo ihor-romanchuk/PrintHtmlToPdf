@@ -1,0 +1,49 @@
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 17px 0 3px;
+  text-align: left;
+
+  .logo-block {
+    padding: 5px 0 0 36px;
+
+    .address {
+      padding-top: 7px;
+      color: #333;
+    }
+
+    .logo {
+      height: 59px;
+    }
+  }
+
+  .reference-box {
+    width: 323px;
+    border: 2px solid #084f98;
+    padding: 0 20px 5px 20px;
+
+    .title {
+      padding: 2px 0;
+      font-size: 14px;
+    }
+
+    div {
+      line-height: 17px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .amount-block {
+      display: flex;
+      justify-content: center;
+      padding-top: 17px;
+
+      .amount {
+        span + span {
+          padding-left: 20px;
+        }
+      }
+    }
+  }
+}

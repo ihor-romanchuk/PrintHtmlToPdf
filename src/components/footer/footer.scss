@@ -1,0 +1,120 @@
+@import "../shared/variables.scss";
+
+.footer-section {
+  font-size: 12px;
+  height: $footer-section-height;
+
+  @media print {
+    page-break-inside: auto;
+    height: #{$footer-section-height + $footer-section-padding-bottom};
+
+    &.with-background {
+      background-color: white;
+    }
+
+    .fixed-content {
+      position: fixed;
+      bottom: $footer-section-padding-bottom;
+      left: 12px;
+      width: calc(100% - #{2 * $main-container-padding-left-right});
+      z-index: -1;
+    }
+  }
+
+  .footer-title {
+    text-align: center;
+    font-size: 12px;
+  }
+
+  .footer-body {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 22px;
+  }
+
+  .payment-options-block {
+    width: 389px;
+    border: 2px solid #084f98;
+    padding: 7px 7px 20px 7px;
+
+    .payment-title {
+      font-size: 13px;
+      line-height: 17px;
+    }
+
+    .options-wrapper {
+      padding: 5px 10px;
+
+      .payment-text {
+        line-height: 15px;
+
+        & + .payment-option {
+          padding-top: 8px;
+        }
+      }
+    }
+
+    .payment-option {
+      span:first-child {
+        width: 112px;
+        display: inline-block;
+
+        &:not(.title) {
+          padding-top: 8px;
+        }
+      }
+
+      .title {
+        font-size: 17px;
+        line-height: 23px;
+      }
+
+      .text-bold {
+        font-size: 16px;
+      }
+    }
+
+    .special-option {
+      padding-top: 10px;
+
+      .description {
+        line-height: 12px;
+        padding-top: 4px;
+      }
+    }
+  }
+
+  .payment-summary-block {
+    .summary-wrapper {
+      background-color: #ccc;
+      padding: 0 15px 5px 15px;
+      border-radius: 8px;
+      width: 320px;
+
+      .info-item {
+        display: flex;
+        justify-content: space-between;
+        line-height: 17px;
+
+        &:last-child {
+          padding-top: 20px;
+        }
+      }
+    }
+
+    .payment-request {
+      line-height: 12px;
+      padding: 3px 0 0 15px;
+    }
+
+    .client {
+      padding: 43px 0 0 30px;
+      font-size: 13px;
+      line-height: 16px;
+
+      .name {
+        font-weight: 700;
+      }
+    }
+  }
+}

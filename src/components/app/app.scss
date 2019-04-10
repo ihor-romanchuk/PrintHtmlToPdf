@@ -1,0 +1,50 @@
+@import "../shared/variables.scss";
+@import "../shared/styles.scss";
+
+.app {
+  display: flex;
+  justify-content: flex-start;
+
+  @media print {
+    -webkit-print-color-adjust: exact;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .main-container {
+    width: $main-container-width;
+    padding: 0 $main-container-padding-left-right;
+
+    .test-height {
+      $width: 15px;
+
+      top: 0;
+      page-break-inside: auto;
+
+      & > * {
+        position: absolute;
+        width: $width;
+        color: white;
+        background-color: black;
+        word-break: break-all;
+        z-index: 9999;
+        font-size: 24px;
+        font-weight: 700;
+        text-align: right;
+
+        &:nth-child(even) {
+          color: black;
+          background-color: #19ff00;
+        }
+
+        @for $i from 0 through 10 {
+          &:nth-child(#{$i + 1}) {
+            left: $i * $width;
+          }
+        }
+      }
+    }
+  }
+}

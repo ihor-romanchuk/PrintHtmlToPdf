@@ -1,0 +1,35 @@
+.additional-info-section {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  margin-top: -55px;
+  text-align: left;
+
+  & > div {
+    display: inline-block;
+    vertical-align: top;
+
+    &:first-child {
+      width: 54%;
+    }
+
+    &:last-child {
+      width: 44%;
+    }
+  }
+
+  .title-wrapper {
+    border-bottom: solid 1px #000;
+    padding-left: 10px;
+
+    .title {
+      font-size: 17px;
+    }
+  }
+
+  .text {
+    font-size: 16px;
+    line-height: 18px;
+    padding: 1px 0 0 11px;
+  }
+}

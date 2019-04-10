@@ -1,0 +1,16 @@
+@import "../shared/variables.scss";
+
+.paging-container {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+
+  .paging-item {
+    position: absolute;
+    right: calc(
+      100% - #{$main-container-width - $main-container-padding-left-right}
+    );
+  }
+}

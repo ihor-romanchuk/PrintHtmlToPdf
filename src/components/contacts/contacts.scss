@@ -1,0 +1,54 @@
+.contacts-section {
+  $icon-width: 35px;
+  $icon-height: 35px;
+
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  padding-top: 20px;
+
+  .contact-info-wrapper {
+    padding-left: 82px;
+  }
+
+  .options {
+    padding-right: 80px;
+
+    .option + .option {
+      padding-top: 4px;
+    }
+
+    .icon-wrapper {
+      display: inline-block;
+      vertical-align: top;
+      width: $icon-width;
+      height: $icon-height;
+
+      img {
+        width: 100%;
+        margin-top: -7px;
+      }
+    }
+
+    .info-wrapper {
+      display: inline-block;
+      width: calc(100% - #{$icon-width});
+      padding-left: 10px;
+    }
+
+    .title-wrapper {
+      display: flex;
+      justify-content: space-between;
+
+      .title {
+        font-size: 17px;
+        line-height: 19px;
+      }
+
+      .value {
+        font-weight: 700;
+      }
+    }
+  }
+}
