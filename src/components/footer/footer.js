@@ -13,7 +13,7 @@ class Footer extends Component {
           <div className="footer-title">{this.props.infoTitle}</div>
           <div className="footer-body">
             <div className="payment-options-block">
-              <div className="payment-title button-blue">
+              <div className="payment-title button" style={{backgroundColor: this.props.tableColor}}>
                 {this.props.paymentOptions.paymentTitle}
               </div>
               <div className="options-wrapper">

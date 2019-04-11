@@ -24,6 +24,7 @@ class App extends Component {
         city: data.client.city,
         state: data.client.state,
         postalCode: data.client.postalcode,
+        tableColor: data.tablecolor,
         referenceInfo: {
           title: data.headers.header1english,
           number: data.texts.value1english,
@@ -105,6 +106,7 @@ class App extends Component {
       footerData: {
         infoTitle: data.texts.couponenglish,
         titleFontColor: data.fontcolor,
+        tableColor: data.tablecolor,
         paymentOptions: {
           paymentTitle: data.headers.header12english,
           paymentText: data.texts.payment1english,

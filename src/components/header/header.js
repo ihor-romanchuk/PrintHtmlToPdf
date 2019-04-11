@@ -28,7 +28,7 @@ class Header extends Component {
             );
           })}
           <div className="amount-block">
-            <div className="amount button-blue">
+            <div className="amount button" style={{backgroundColor: this.props.tableColor}}>
               <span>{this.props.referenceInfo.amount.title}</span>
               <span>{this.props.referenceInfo.amount.value}</span>
             </div>
