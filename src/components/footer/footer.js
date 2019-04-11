@@ -3,17 +3,19 @@ import "./footer.scss";
 
 class Footer extends Component {
   render() {
+    let borderStyle = `2px solid ${this.props.tableColor}`;
+
     return (
       <div
         className={`footer-section ${
           this.props.isSplitted ? "with-background" : ""
-        }`}
+          }`}
       >
         <div className="fixed-content">
           <div className="footer-title">{this.props.infoTitle}</div>
           <div className="footer-body">
-            <div className="payment-options-block">
-              <div className="payment-title button" style={{backgroundColor: this.props.tableColor}}>
+            <div className="payment-options-block" style={{ border: borderStyle }}>
+              <div className="payment-title button" style={{ backgroundColor: this.props.tableColor }}>
                 {this.props.paymentOptions.paymentTitle}
               </div>
               <div className="options-wrapper">

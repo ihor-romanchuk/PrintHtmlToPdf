@@ -3,6 +3,8 @@ import "./header.scss";
 
 class Header extends Component {
   render() {
+    let borderStyle = `2px solid ${this.props.tableColor}`;
+
     return (
       <div className="header-section">
         <div className="logo-block">
@@ -12,7 +14,8 @@ class Header extends Component {
             {this.props.postalCode}
           </div>
         </div>
-        <div className="reference-box">
+        <div className="reference-box"
+             style={{border: borderStyle}}>
           <div
             className="title"
             style={{ color: this.props.referenceInfo.titleFontColor }}
@@ -28,7 +31,7 @@ class Header extends Component {
             );
           })}
           <div className="amount-block">
-            <div className="amount button" style={{backgroundColor: this.props.tableColor}}>
+            <div className="amount button" style={{ backgroundColor: this.props.tableColor }}>
               <span>{this.props.referenceInfo.amount.title}</span>
               <span>{this.props.referenceInfo.amount.value}</span>
             </div>
